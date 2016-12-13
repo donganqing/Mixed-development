@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>分享</title>
+	</head>
+	<body>
+		
+	</body>
+	<script>
+		document.addEventListener( 'plusready', plusReady, false )
+		
+		function plusReady(){
+			plus.share.getServices( function( ss ){
+				shares = ss;
+				for( var i in ss ){
+					var s = ss[ i ];
+					var item = document.createElement( 'button' );
+					item.setAttribute( 'class', 'ditem' );
+					item.setAttribute( 'onclick', ( s.id == 'weixin' ) ? 'shareAction( this.plusShare )': 'shareAction( this.plusShare )' );
+					item.innerText = s.description;
+					item.plusShare = s;
+					document.body.appendChild(item);
+				
+				}
+				
+			}, function( e ){
+				alert( '获取分享服务列表失败：'+e.message );
+			} );
+		}
+		
+		//点击分享
+		function shareAction( s, ex ){
+			console.log( '分享操作：' );
+			if( !s ){
+				console.log( '无效的分享服务！' );
+				return;
+			}
+			if( s.authenticated ){
+				console.log( '-----已授权-----' );
+				shareMessage( s, ex );
+			}else{
+				console.log( '-----未授权-----' );
+				s.authorize( function(){
+					shareMessage( s, ex );
+				},function(){
+					console.log( '认证授权失败：'+ e.code + '-' + e.message );
+				} )
+			}
+		}
+		
+		//分享信息
+		function shareMessage( s, ex ){
+			//要分享的信息
+			var msg = { content:'自定义分享', extra:{ scene:ex } };
+			
+				msg.pictures = [ 'img/23.png' ];
+			//发送分享
+			s.send( msg, function(){
+				alert( "分享到\""+ s.description +"\"成功！" );
+			},function(){
+				alert( "分享到\""+ s.description +"\"失败！"+ e.code+ '-'+ e.message );
+			} )
+		}
+		
+		
+		
+	</script>
+</html>

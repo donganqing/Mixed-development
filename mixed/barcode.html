@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>二维码扫描</title>
+	</head>
+	<style>
+		html,body{
+			margin: 0px;
+			padding: 0px;
+			height: 100%;
+		}
+		#bcid{
+			background: #0f0;
+			height: 380px;
+			width: 360px;
+		}
+		
+	</style>
+	<body>
+		<input type='button' onclick='startRecognize()' value='创建扫描控件' />
+		<input type='button' onclick='startScan()' value='开始扫描' />
+		<input type='button' onclick='cancelScan()' value='取消扫描' />
+		<input type='button' onclick='setFlash()' value='开启闪光灯' />
+		<div id= "bcid"></div>
+		<input type='text' id='text'/>
+	</body>
+	<script>
+		// 扩展API加载完毕后调用onPlusReady回调函数 
+		document.addEventListener( "plusready", onPlusReady, false );
+		// 扩展API加载完毕，现在可以正常调用扩展API
+		function onPlusReady() {
+		  var e = document.getElementById("scan");
+		  e.removeAttribute( "disabled" );
+		}
+		
+		var scan = null;
+		//onmarked  条码识别成功事件
+		function onmarked( type, result ){
+			var text = '未知';
+			switch( type ){
+				case plus.barcode.QR: text =  "QR:";
+					break;
+				
+				case plus.barcode.EAN13: text = 'EAN13:';
+					break;
+				
+				case plus.barcode.EAN8: text = 'EAN8:';
+					break;
+			}
+			alert( text+result );
+			
+		}
+		
+		//创建扫描控件
+		function startRecognize(){
+			scan = new plus.barcode.Barcode( 'bcid' );
+			scan.onmarked = onmarked;
+		}
+		
+		//开始扫描
+		function startScan(){
+			scan.start();
+		}
+		
+		//取消扫描
+		function cancelScan(){
+			scan.cancel();
+		}
+		
+		//开启闪光灯
+		function setFlash(){
+			scan.setFlash();
+		}
+		
+	</script>
+</html>

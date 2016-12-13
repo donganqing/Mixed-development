@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title></title>
+    <style>
+    	#pic{
+    		width: 200px;
+    		height: 300px;
+    		/*border: 1px solid palegreen;*/
+    	}
+    </style>
+    <script type="text/javascript">
+    	
+   		/*document.addEventListener('plusready', function(){
+   			//console.log("所有plus api都应该在此事件发生后调用，否则会出现plus is undefined。"
+   			
+   		});*/
+
+   		//oPic.src = window.localStorage.getItem( "headPic")||"img/default.png";
+   		//console.log(oPic.src);
+   		function getImage() {
+   		var oPic = document.getElementById('pic');
+   			var cmr = plus.camera.getCamera();//获取摄像头管理对象
+   			//调用拍照方法
+   			cmr.captureImage( function ( p ) { 
+   				console.log( '成功：'+p );
+   			
+   				//oPic.src = 图片路径
+   				//获取本地图片对象
+   				plus.io.resolveLocalFileSystemURL( p, function ( entry ) { 
+   					oPic.src =entry.fullPath//通过entry或渠道与片的路径
+   					//window.localStorage.setItem( "headPic", entry.fullPath);
+   					console.log( entry.fullPath );
+   					
+   				}, function( e ) { 
+   				
+   					console.log( '读取拍照文件：' +e.message );
+   				} );
+   			}, function( e ) { 
+   				console.log( '失败：' + e.message );
+   			} );
+   		}
+   		
+
+   		
+   		
+    </script>
+</head>
+<body>
+	<img src="" alt=""  id="pic" />
+	<button id="bnt" onclick="getImage()">拍照</button>
+	
+</body>
+</html>
